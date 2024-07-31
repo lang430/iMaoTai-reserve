@@ -246,10 +246,23 @@ def act_params(shop_id: str, item_id: str):
 def send_msg(title, content):
     if config.PUSH_TOKEN is None:
         return
-    url = 'http://www.pushplus.plus/send'
-    r = requests.get(url, params={'token': config.PUSH_TOKEN,
-                                  'title': title,
-                                  'content': content})
+    url = 'https://api.anpush.com/push/' + config.PUSH_TOKEN
+
+    payload = {
+        "title": title,
+        "content": content,
+        "channel": "17425"
+    }
+
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    r = requests.post(url, headers=headers, data=payload)
+
+    # r = requests.get(url, params={'token': config.PUSH_TOKEN,
+    #                               'title': title,
+    #                               'content': content})
     logging.info(f'通知推送结果：{r.status_code, r.text}')
 
 
